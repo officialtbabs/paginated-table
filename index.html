@@ -1,97 +1,132 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technicians List</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paginated Table</title>
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/css/style.css" />
 
     <style>
-        .table{ 
-            border-spacing: 0 15px;
-        }
-           
-        
+      .table {
+        border-spacing: 0 15px;
+      }
     </style>
-</head>
-<body>
-    <div class="mx-2">
-      <header>
-        <div class="flex justify-center">
-            <img class="my-5" src="img/image001.png" alt="Mecho Logo">
-        </div>
-    </header>
-    <main class="w-full">
-        <div id="technicianTable" class="flex justify-center  lg:m-20">
-            <table class="table border-separate space-y-6 w-2/4">
-                <thead class="text-xs text-indigo-300">
-                    <tr class="table-border bg-indigo-800">
-                        <th class="table-border text-left rounded-l-lg">S/N</th>
-                        <th class="table-border text-left">IMAGE</th>
-                        <th class="table-border text-left">FULLNAME</th>
-                        <th class="table-border text-left">TECHNICIAN ID</th>
-                        <th class="table-border text-left">SPECIALITY</th>
-                        <th class="table-border text-left">COUNTRY</th>
-                        <th class="table-border text-left rounded-r-lg">DATE</th>
-                    </tr>
-                </thead>
-                <tbody id= "tableBody" class="divide-y divide-light-blue-400 text-xs">
+  </head>
+  <body>
+    <main class="w-screen h-screen">
+      <div class="paginated-table-container">
+        <table class="paginated-table">
+          <thead class="header">
+            <tr>
+              <th>S/N</th>
+              <th>IMAGE</th>
+              <th>FULLNAME</th>
+              <th>ID</th>
+              <th>SPECIALITY</th>
+              <th>COUNTRY</th>
+              <th>DATE</th>
+            </tr>
+          </thead>
+          <tbody id="paginated-table-body" class="body"></tbody>
+        </table>
 
-                </tbody>
-            </table>
-        </div>
-        
         <div class="">
-            <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div class="flex-1 flex justify-between sm:hidden">
-                  <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" onclick="prevPage()">
-                    Previous
-                  </a>
-                  <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" onclick="nextPage()">
-                    Next
-                  </a>
-                </div>
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                  <div>
-                    <p class="text-sm text-gray-700">
-                      Showing
-                      <span class="font-medium">1</span>
-                      to
-                      <span class="font-medium">10</span>
-                      of
-                      <span id="totalTechnicians" class="font-medium"></span>
-                      results
-                    </p>
-                  </div>
-                  <div id="pagination">
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                      <a id="previous" href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" onclick="prevPage()">
-                        <span class="sr-only">Previous</span>
-                        <!-- Heroicon name: solid/chevron-left -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                      </a>
-                      <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-
-                      <span id="page_number" class="outline-none"></span>
-                     
-                      <a id="next" href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" onclick="nextPage()">
-                        <span class="sr-only">Next</span>
-                        <!-- Heroicon name: solid/chevron-right -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                        </svg>
-                      </a>
-                    </nav>
-                  </div>
-                </div>
+          <div class="relative bg-white w-10 h-10 after:absolute after:bg-black after:w-full after:h-full"></div>
+          <div
+            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+          >
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                onclick="prevPage()"
+              >
+                Previous
+              </a>
+              <a
+                href="#"
+                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                onclick="nextPage()"
+              >
+                Next
+              </a>
+            </div>
+            <div
+              class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+            >
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing
+                  <span class="font-medium">1</span>
+                  to
+                  <span class="font-medium">10</span>
+                  of
+                  <span id="totalTechnicians" class="font-medium"></span>
+                  results
+                </p>
               </div>
-        </div>
-    </main>
-    </div>
-</body>
+              <div id="pagination">
+                <nav
+                  class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                  aria-label="Pagination"
+                >
+                  <a
+                    id="previous"
+                    href="#"
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                    onclick="prevPage()"
+                  >
+                    <span class="sr-only">Previous</span>
+                    <!-- Heroicon name: solid/chevron-left -->
+                    <svg
+                      class="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </a>
+                  <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
 
-<script src="./script.js"></script>
+                  <span id="page_number" class="outline-none"></span>
+
+                  <a
+                    id="next"
+                    href="#"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                    onclick="nextPage()"
+                  >
+                    <span class="sr-only">Next</span>
+                    <!-- Heroicon name: solid/chevron-right -->
+                    <svg
+                      class="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+
+  <script type="module" src="./index.js"></script>
 </html>
