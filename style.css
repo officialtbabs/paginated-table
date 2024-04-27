@@ -14,23 +14,13 @@
   @apply text-xs text-stone-600;
 }
 
-.paginated-table tr {
+/* .paginated-table tr {
   @apply bg-black;
-}
-
-/* .paginated-table tr:hover {
-  @apply bg-blue-500;
 } */
 
 .paginated-table tr:not(:only-child):hover {
-  @apply bg-blue-500/[.2] text-yellow-500;;
+  @apply bg-blue-500/[.2] text-yellow-500;
 }
-
-/* .paginated-table tr:not(:only-child):hover td:not(2) {
-  @apply text-yellow-500;
-} */
-
-/* tr:not(:only-child):hover td:not(2)  */
 
 .paginated-table th {
   @apply text-xs text-left p-4 whitespace-nowrap border border-blue-500;
@@ -49,10 +39,6 @@
 }
 
 .paginated-table td {
-  /* position: relative; */
-  /* display: block; */
-  /* text-align: center; */
-
   @apply relative text-xs text-left !p-2 transition-all duration-50 ease-in-out whitespace-nowrap border border-blue-500;
 }
 
@@ -69,25 +55,9 @@
 }
 
 .paginated-table .image-mask {
-  /* position: absolute;
-  top: 8px;
-  left: 8px;
-  background: linear-gradient(to right, rgba(255, 255, 255, 1), transparent);
-  mix-blend-mode: overlay; */
-
-  /* background: #000; */
-
-  /* background-position: "50px 0"; */
-  background-repeat: no-repeat;
-  /* -webkit-mask: url("http://dev.iamvdo.me/newLogoCSS3create2.png") center;
-  mask: url("#mask-firefox"); */
-
   @apply absolute top-2 left-2 h-12 w-12 rounded-full border border-blue-500;
 }
 
-.paginated-table .image-mask:hover {
-  /* background: #000 !important; */
-  transform: rotateY(30deg);
-  transition: all;
-  transition-duration: 500ms;
+.pagination-nav-container {
+  @apply max-w-4xl w-full bg-blue-500 px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6;
 }

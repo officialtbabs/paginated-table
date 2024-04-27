@@ -32,20 +32,10 @@ export const applyShineAnimationTL = (elementId) => {
     }
   );
 
-  //   shineAnimationTl.fromTo(
-  //     elementId,
-  //     {
-  //       backgroundPosition: "-130px 0",
-  //       ease: "power1.inOut",
-  //     },
-  //     { transform: "rotateY(0deg)" }
-  //   );
-
   shineAnimationTl.duration(0.5);
-  //   shineAnimationTl.repeat(1);
 };
 
-export const imageFocusAmimation = (element) => {
+export const imageFocusAnimation = (element) => {
   const imageFocusAnimation = gsap.timeline();
 
   imageFocusAnimation.fromTo(
@@ -62,9 +52,10 @@ export const imageFocusAmimation = (element) => {
       ease: "circ.out",
     }
   );
+  imageFocusAnimation.duration(0.25);
 };
 
-export const imageBlurAmimation = (element) => {
+export const imageBlurAnimation = (element) => {
   const imageBlurAnimation = gsap.timeline();
 
   imageBlurAnimation.fromTo(
@@ -80,4 +71,6 @@ export const imageBlurAmimation = (element) => {
       ease: "circ.in",
     }
   );
+
+  imageBlurAnimation.duration(0.25);
 };
