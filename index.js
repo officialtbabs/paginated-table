@@ -7,7 +7,6 @@ import {
 } from "./utils/animations";
 import { dummyData } from "./utils/data.model";
 
-
 // DarkMode
 if (
   localStorage.theme === "dark" ||
@@ -21,89 +20,113 @@ if (
 
 // getData
 totalTechnicians.textContent = dummyData.length;
-let current_page = 1;
-let recordPerPage = 10;
+let currentPage = 1;
+let recordsPerPage = 10;
 
-let pageNo = function () {
-  return Math.ceil(dummyData.length / recordPerPage);
+const paginationDescriptionPageStartElement = document
+  .getElementsByClassName("pagination-description")[0]
+  .getElementsByTagName("span")[0];
+
+const paginationDescriptionPageEndElement = document
+  .getElementsByClassName("pagination-description")[0]
+  .getElementsByTagName("span")[1];
+
+const paginatedTableBodyElement = document.getElementById(
+  "paginated-table-body"
+);
+const paginationNavElementHolder = document.getElementById(
+  "pagination-nav-element-holder"
+);
+
+const paginationTableRecordElements = Array.from(
+  document.getElementsByTagName("tr")
+).filter((element, index) => index < 0);
+
+const computeNumberOfPages = (totalRecords, recordsPerPage) => {
+  return Math.ceil(totalRecords / recordsPerPage);
 };
 
-let pageNumbers = function () {
-  for (let i = 0; i < pageNo(); i++) {
-    let a = document.createElement("a");
-    a.setAttribute("href", "#");
-    a.setAttribute(
+const computePaginationDescriptionPageStart = (currentPage, recordsPerPage) => {
+  return currentPage * recordsPerPage - (recordsPerPage - 1);
+};
+
+const computePaginationDescriptionPageEnd = (currentPage, recordsPerPage) => {
+  return currentPage * recordsPerPage;
+};
+
+const createPageNavElements = (noOfPages, navElementHolder) => {
+  for (let i = 0; i < noOfPages; i++) {
+    const button = document.createElement("button");
+
+    button.setAttribute(
       "class",
-      "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium clickPageNumber"
+      "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
     );
-    a.textContent = i + 1;
-    let pageNumber = document.getElementById("page_number");
-    pageNumber.appendChild(a);
+    button.textContent = i + 1;
+
+    navElementHolder.appendChild(button);
   }
 };
 
-let changePage = function (page) {
-  if (page < 1) {
-    page = 1;
-  }
-  if (page > pageNo() - 1) {
-    page = pageNo();
-  }
+let updatePaginatedTableRecords = (
+  tableBodyElement,
+  records,
+  recordStartIndex,
+  recordEndIndex
+) => {
+  tableBodyElement.innerHTML = "";
 
-  const tableBody = document.getElementById("paginated-table-body");
-  tableBody.innerHTML = "";
+  records
+    .filter(
+      (record, index) => index >= recordStartIndex - 1 && index < recordEndIndex
+    )
+    .forEach((record, index) => {
+      const tr = document.createElement("tr");
+      onRowEntryEvent(tr);
+      onRowExitEvent(tr, index + recordStartIndex);
+      const td = document.createElement("td");
+      td.setAttribute("class", "text-cell rounded-l-lg");
+      td.innerHTML = index + recordStartIndex;
 
-  for (
-    let j = (page - 1) * recordPerPage;
-    j < page * recordPerPage && j < dummyData.length;
-    j++
-  ) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.setAttribute("class", "text-cell rounded-l-lg");
-    td.innerHTML = j + 1;
+      const td1 = document.createElement("td");
+      const img = document.createElement("img");
+      const div = document.createElement("div");
+      img.setAttribute("src", record.image);
+      div.setAttribute("class", "image-mask");
+      td1.appendChild(img);
+      td1.appendChild(div);
 
-    const td1 = document.createElement("td");
-    const img = document.createElement("img");
-    const div = document.createElement("div");
-    img.setAttribute("src", dummyData[j].image);
-    div.setAttribute("class", "image-mask");
-    td1.appendChild(img);
-    td1.appendChild(div);
+      const td2 = document.createElement("td");
+      td2.setAttribute("class", "text-cell");
+      td2.innerHTML = record.fullname;
 
-    const td2 = document.createElement("td");
-    td2.setAttribute("class", "text-cell");
-    td2.innerHTML = dummyData[j].fullname;
+      const td3 = document.createElement("td");
+      td3.setAttribute("class", "text-cell");
+      td3.innerHTML = record.id;
 
-    const td3 = document.createElement("td");
-    td3.setAttribute("class", "text-cell");
-    td3.innerHTML = dummyData[j].id;
+      const td4 = document.createElement("td");
+      td4.setAttribute("class", "text-cell");
+      td4.innerHTML = record.speciality;
 
-    const td4 = document.createElement("td");
-    td4.setAttribute("class", "text-cell");
-    td4.innerHTML = dummyData[j].speciality;
+      const td5 = document.createElement("td");
+      td5.setAttribute("class", "text-cell");
+      td5.innerHTML = record.country;
 
-    const td5 = document.createElement("td");
-    td5.setAttribute("class", "text-cell");
-    td5.innerHTML = dummyData[j].country;
+      const td6 = document.createElement("td");
+      td6.setAttribute("class", "text-cell rounded-r-lg");
+      td6.innerHTML = record.date;
 
-    const td6 = document.createElement("td");
-    td6.setAttribute("class", "text-cell rounded-r-lg");
-    td6.innerHTML = dummyData[j].date;
+      tr.appendChild(td);
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      tr.appendChild(td3);
+      tr.appendChild(td4);
+      tr.appendChild(td5);
+      tr.appendChild(td6);
 
-    tr.appendChild(td);
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
-    tr.appendChild(td6);
-
-    tableBody.appendChild(tr);
-  }
+      tableBodyElement.appendChild(tr);
+    });
 };
-
-let linearTextFillAnimationInterval;
 
 const linearTextFillAnimation = (cell) => {
   const text = String(cell.innerHTML);
@@ -116,6 +139,7 @@ const linearTextFillAnimation = (cell) => {
 
   const linearTextFillAnimationInterval = setInterval(() => {
     if (count < textLength) {
+      console.log(cell.innerHTML);
       cell.innerHTML =
         text.slice(0, count + 1) + textPlaceholder.slice(count + 1);
 
@@ -141,7 +165,6 @@ const onRowEntryEvent = (row) => {
 
 // Handles row exit
 const onRowExitEvent = (row, rowIndex) => {
-//   clearInterval(linearTextFillAnimationInterval);
   row.addEventListener("mouseleave", (e) => {
     const target = e.target;
     const currentData = Object.entries(dummyData[rowIndex - 1]).filter(
@@ -164,61 +187,107 @@ const onRowExitEvent = (row, rowIndex) => {
   });
 };
 
-let clickPage = function () {
-  document.addEventListener("click", function (e) {
-    if (
-      e.target.nodeName == "A" &&
-      e.target.classList.contains("clickPageNumber")
-    ) {
-      current_page = e.target.textContent;
-      changePage(current_page);
+let onClickPaginationNavElement = () => {
+  Array.from(paginationNavElementHolder.getElementsByTagName("button")).forEach(
+    (button) => {
+      button.addEventListener("click", (e) => {
+        currentPage = e.target.textContent;
+
+        updatePaginatedTableRecords(
+          paginatedTableBodyElement,
+          dummyData,
+          computePaginationDescriptionPageStart(currentPage, recordsPerPage),
+          computePaginationDescriptionPageEnd(currentPage, recordsPerPage)
+        );
+
+        paginationDescriptionPageStartElement.innerHTML =
+          computePaginationDescriptionPageStart(currentPage, recordsPerPage);
+        paginationDescriptionPageEndElement.innerHTML =
+          computePaginationDescriptionPageEnd(currentPage, recordsPerPage);
+      });
     }
-  });
+  );
 };
 
-let prevPage = function () {
-  if (current_page > 1) {
-    current_page--;
-    changePage(current_page);
+const prevPage = () => {
+  if (currentPage > 1) {
+    currentPage--;
+    updatePaginatedTableRecords(
+      paginatedTableBodyElement,
+      dummyData,
+      computePaginationDescriptionPageStart(currentPage, recordsPerPage),
+      computePaginationDescriptionPageEnd(currentPage, recordsPerPage)
+    );
+
+    paginationDescriptionPageStartElement.innerHTML =
+      computePaginationDescriptionPageStart(currentPage, recordsPerPage);
+    paginationDescriptionPageEndElement.innerHTML =
+      computePaginationDescriptionPageEnd(currentPage, recordsPerPage);
   }
 };
 
-let nextPage = function () {
-  if (current_page < pageNo()) {
-    current_page++;
-    changePage(current_page);
+const nextPage = () => {
+  if (currentPage < computeNumberOfPages(dummyData.length, recordsPerPage)) {
+    currentPage++;
+    updatePaginatedTableRecords(
+      paginatedTableBodyElement,
+      dummyData,
+      computePaginationDescriptionPageStart(currentPage, recordsPerPage),
+      computePaginationDescriptionPageEnd(currentPage, recordsPerPage)
+    );
+
+    paginationDescriptionPageStartElement.innerHTML =
+      computePaginationDescriptionPageStart(currentPage, recordsPerPage);
+    paginationDescriptionPageEndElement.innerHTML =
+      computePaginationDescriptionPageEnd(currentPage, recordsPerPage);
   }
 };
+
+// const applyEventListenerToRecordElement = (recordElements) => {
+//     console.log(recordElements)
+//   recordElements.forEach((row, index) => {
+//     onRowEntryEvent(row);
+//     onRowExitEvent(row, index);
+//   });
+// };
 
 let callFunc = function () {
-  changePage(1);
-  pageNumbers();
-  clickPage();
+  updatePaginatedTableRecords(
+    paginatedTableBodyElement,
+    dummyData,
+    computePaginationDescriptionPageStart(currentPage, recordsPerPage),
+    computePaginationDescriptionPageEnd(currentPage, recordsPerPage)
+  );
+  createPageNavElements(
+    computeNumberOfPages(dummyData.length, recordsPerPage),
+    paginationNavElementHolder
+  );
+  onClickPaginationNavElement();
   applyShineAnimationTL(".image-mask");
 };
 
-callFunc();
+document.getElementById("previous").addEventListener("click", prevPage);
+document.getElementById("next").addEventListener("click", nextPage);
 // function getData(){
 
 // }
 
-//tabulateData
-
-let a = document.createElement("a");
-a.setAttribute(
-  "class",
-  "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-);
-a.setAttribute("href", "#");
+// let a = document.createElement("a");
+// a.setAttribute(
+//   "class",
+//   "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+// );
+// a.setAttribute("href", "#");
 
 // Gets all table rows after DOM is loaded
-window.addEventListener("load", () => {
-  const rows = Array.from(document.getElementsByTagName("tr"));
 
-  rows.forEach((row, index) => {
-    if (index !== 0) {
-      onRowEntryEvent(row);
-      onRowExitEvent(row, index);
-    }
-  });
+window.addEventListener("load", () => {
+  callFunc();
+
+  paginationDescriptionPageStartElement.innerHTML =
+    computePaginationDescriptionPageStart(currentPage, recordsPerPage);
+  paginationDescriptionPageEndElement.innerHTML =
+    computePaginationDescriptionPageEnd(currentPage, recordsPerPage);
+
+//   applyEventListenerToRecordElement(paginationTableRecordElements);
 });
