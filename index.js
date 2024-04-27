@@ -4,8 +4,8 @@ import {
   applyShineAnimationTL,
   imageBlurAnimation,
   imageFocusAnimation,
-} from "./utils/animations";
-import { dummyData } from "./utils/data.model";
+} from "./utils/animations.js";
+import { dummyData } from "./utils/data.model.js";
 
 // DarkMode
 if (
