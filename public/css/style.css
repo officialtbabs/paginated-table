@@ -1098,7 +1098,7 @@ video {
   font-size: 0.75rem;
   line-height: 1rem;
   transition-property: all;
-  transition-duration: 50ms;
+  transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1158,6 +1158,13 @@ video {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
+}
+
+.pagination-description p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
 .after\:absolute::after {
