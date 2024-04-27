@@ -26,6 +26,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: corepack enable
-      - run: yarn install --no-lockfile
+      - run: yarn install --immutable --immutable-cache --check-cache
       - run: yarn build
     # - run: npm test
