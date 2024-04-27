@@ -289,5 +289,5 @@ window.addEventListener("load", () => {
   paginationDescriptionPageEndElement.innerHTML =
     computePaginationDescriptionPageEnd(currentPage, recordsPerPage);
 
-//   applyEventListenerToRecordElement(paginationTableRecordElements);
+  //   applyEventListenerToRecordElement(paginationTableRecordElements);
 });

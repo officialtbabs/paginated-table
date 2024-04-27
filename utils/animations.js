@@ -74,4 +74,3 @@ export const imageBlurAnimation = (element) => {
 
   imageBlurAnimation.duration(0.25);
 };
-
