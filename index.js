@@ -2,12 +2,13 @@
 
 import {
   applyShineAnimationTL,
-  imageBlurAmimation,
-  imageFocusAmimation,
+  imageBlurAnimation,
+  imageFocusAnimation,
 } from "./utils/animations";
 import { dummyData } from "./utils/data.model";
-// import
 
+
+// DarkMode
 if (
   localStorage.theme === "dark" ||
   (!("theme" in localStorage) &&
@@ -18,7 +19,7 @@ if (
   document.documentElement.classList.remove("dark");
 }
 
-//getData
+// getData
 totalTechnicians.textContent = dummyData.length;
 let current_page = 1;
 let recordPerPage = 10;
@@ -102,61 +103,66 @@ let changePage = function (page) {
   }
 };
 
-// const tableRowEventHoverEventListener
-// console.log(document.getElementsByTagName("tr").length);
+let linearTextFillAnimationInterval;
 
-window.addEventListener("load", () => {
-  const rows = Array.from(document.getElementsByTagName("tr"));
+const linearTextFillAnimation = (cell) => {
+  const text = String(cell.innerHTML);
+  const textLength = text.length;
+  const textPlaceholder = "_".repeat(textLength);
 
-  rows.forEach((row, index) => {
-    if (index !== 0) {
-      row.addEventListener("mouseenter", (e) => {
-        const target = e.target;
-        imageFocusAmimation(target.children[1].children[1]);
-      });
+  cell.innerHTML = textPlaceholder;
 
-      row.addEventListener("mouseleave", (e) => {
-        const target = e.target;
-        imageBlurAmimation(target.children[1].children[1]);
-      });
+  let count = 0;
+
+  const linearTextFillAnimationInterval = setInterval(() => {
+    if (count < textLength) {
+      cell.innerHTML =
+        text.slice(0, count + 1) + textPlaceholder.slice(count + 1);
+
+      count++;
+    } else {
+      clearInterval(linearTextFillAnimationInterval);
     }
+  }, 10);
+};
+
+// Handles row entry
+const onRowEntryEvent = (row) => {
+  row.addEventListener("mouseenter", (e) => {
+    const target = e.target;
+
+    Array.from(target.querySelectorAll(".text-cell")).forEach((cell) => {
+      linearTextFillAnimation(cell);
+    });
+
+    imageFocusAnimation(target.children[1].children[1]);
   });
-});
+};
 
-document.addEventListener("mouseover", (e) => {
-  const element = e.target;
-  //   console.log(element);
-  if (element.nodeName === "TR") {
-    console.log("habi");
-  }
-});
+// Handles row exit
+const onRowExitEvent = (row, rowIndex) => {
+//   clearInterval(linearTextFillAnimationInterval);
+  row.addEventListener("mouseleave", (e) => {
+    const target = e.target;
+    const currentData = Object.entries(dummyData[rowIndex - 1]).filter(
+      (data) => data[0] !== "image"
+    );
 
-document.addEventListener("mouseover", (e) => {
-  console.log(e);
-  if (
-    e.target.nodeName === "TD" &&
-    e.target.firstChild?.nodeName.match("#text")
-  ) {
-    const text = String(e.target.innerHTML);
-    const textLength = text.length;
-    const textPlaceholder = "_".repeat(textLength);
-
-    e.target.innerHTML = textPlaceholder;
-
-    let count = 0;
-
-    const interrrr = setInterval(() => {
-      if (count < textLength) {
-        e.target.innerHTML =
-          text.slice(0, count + 1) + textPlaceholder.slice(count + 1);
-
-        count++;
+    Array.from(target.querySelectorAll(".text-cell")).forEach((cell, index) => {
+      if (index) {
+        if (index >= 0) {
+          if (currentData[index - 1]) {
+            cell.innerHTML = currentData[index - 1][1];
+          }
+        }
       } else {
-        clearInterval(interrrr);
+        cell.innerHTML = rowIndex;
       }
-    }, 10);
-  }
-});
+    });
+
+    imageBlurAnimation(target.children[1].children[1]);
+  });
+};
 
 let clickPage = function () {
   document.addEventListener("click", function (e) {
@@ -204,3 +210,15 @@ a.setAttribute(
   "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
 );
 a.setAttribute("href", "#");
+
+// Gets all table rows after DOM is loaded
+window.addEventListener("load", () => {
+  const rows = Array.from(document.getElementsByTagName("tr"));
+
+  rows.forEach((row, index) => {
+    if (index !== 0) {
+      onRowEntryEvent(row);
+      onRowExitEvent(row, index);
+    }
+  });
+});
