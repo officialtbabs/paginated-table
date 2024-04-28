@@ -21,10 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: corepack enable
-      - env:
-        YARN_IGNORE_PATH: "true"
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
+        env:
+        YARN_IGNORE_PATH: "true"
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
