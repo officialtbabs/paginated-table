@@ -1,4 +1,4 @@
-import gsap from "../node_modules/gsap";
+import gsap from "/gsap";
 
 export const applyShineAnimationTL = (elementId) => {
   const shineAnimationTl = gsap.timeline();

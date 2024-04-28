@@ -5,9 +5,9 @@ name: Node Build and Deployment to github pages
 
 on:
   push:
-    branches: ["master"]
+    branches: ["master", test]
   pull_request:
-    branches: ["master"]
+    branches: ["master", test]
 
   workflow_dispatch:
 
