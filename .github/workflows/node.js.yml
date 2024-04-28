@@ -23,8 +23,6 @@ jobs:
       - run: corepack enable
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
-        env:
-        YARN_IGNORE_PATH: "true"
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
